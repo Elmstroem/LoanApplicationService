@@ -7,8 +7,8 @@ POST {{LoanApplicationService_Api_HostAddress}}/api/loanapplications
 Content-Type: application/json
 
 {
-  "socialSecurityNumber": "19920724-1224",
-  "amount": 49
+  "socialSecurityNumber": "19920724-0459",
+  "amount": 100000
 }
 
 ### Ogiltigt personnummer

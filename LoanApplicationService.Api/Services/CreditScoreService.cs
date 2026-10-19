@@ -9,6 +9,6 @@ public class CreditScoreService : ICreditScoreService
         await Task.Delay(500);
 
         // Tillfälligt påhittat kreditvärde
-        return 49;
+        return 50;
     }
 }

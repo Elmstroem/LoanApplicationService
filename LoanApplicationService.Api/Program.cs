@@ -8,11 +8,16 @@ using LoanAppService =
 
 var builder = WebApplication.CreateBuilder(args);
 
+
+// ============================================
+// OpenAPI
+// ============================================
+
 builder.Services.AddOpenApi();
 
 
 // ============================================
-// Dependency Injection
+// Dependency Injection - Services
 // ============================================
 
 builder.Services.AddScoped<
@@ -23,12 +28,36 @@ builder.Services.AddScoped<
     ICreditScoreService,
     CreditScoreService>();
 
-builder.Services.AddScoped<
-    ILoanApplicationRepository,
-    LoanApplicationRepository>();
+
+// ============================================
+// Dependency Injection - Repository
+// ============================================
+
+// Lokalt i Development:
+// använd riktig SQL Server + Dapper
+if (builder.Environment.IsDevelopment())
+{
+    builder.Services.AddScoped<
+        ILoanApplicationRepository,
+        LoanApplicationRepository>();
+}
+
+// I Production / Azure:
+// använd repository som lagrar data i minnet
+else
+{
+    builder.Services.AddSingleton<
+        ILoanApplicationRepository,
+        InMemoryLoanApplicationRepository>();
+}
 
 
-// Enum som text i JSON
+// ============================================
+// JSON-inställningar
+// ============================================
+
+// Gör så att enum returneras som exempelvis
+// "Approved" istället för 0
 builder.Services.ConfigureHttpJsonOptions(options =>
 {
     options.SerializerOptions.Converters.Add(
@@ -39,6 +68,10 @@ builder.Services.ConfigureHttpJsonOptions(options =>
 var app = builder.Build();
 
 
+// ============================================
+// HTTP request pipeline
+// ============================================
+
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
@@ -46,6 +79,12 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+
+// ============================================
+// Endpoints
+// ============================================
+
 app.MapLoanApplicationEndpoints();
+
 
 app.Run();
