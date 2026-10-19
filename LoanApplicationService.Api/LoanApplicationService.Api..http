@@ -1,6 +1,32 @@
-@LoanApplicationService.Api__HostAddress = http://localhost:5221
+@LoanApplicationService_Api_HostAddress = https://localhost:8000
 
-GET {{LoanApplicationService.Api__HostAddress}}/weatherforecast/
-Accept: application/json
 
-###
+### Skapa giltig låneansökan
+
+POST {{LoanApplicationService_Api_HostAddress}}/api/loanapplications
+Content-Type: application/json
+
+{
+  "socialSecurityNumber": "19920724-1224",
+  "amount": 49
+}
+
+### Ogiltigt personnummer
+
+POST {{LoanApplicationService_Api_HostAddress}}/api/loanapplications
+Content-Type: application/json
+
+{
+  "socialSecurityNumber": "1990-2010",
+  "amount": 100000
+}
+
+### Ogiltigt lånebelopp
+
+POST {{LoanApplicationService_Api_HostAddress}}/api/loanapplications
+Content-Type: application/json
+
+{
+  "socialSecurityNumber": "19900101-2010",
+  "amount": 0
+}
