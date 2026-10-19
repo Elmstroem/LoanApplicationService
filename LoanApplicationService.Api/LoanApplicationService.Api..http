@@ -31,13 +31,12 @@ Content-Type: application/json
   "amount": 0
 }
 
-@AzureHost = https://loanapplicationserviceapi20261019102717-dmf0cjceapcccebk.westus3-01.azurewebsites.net/
-
 ### Azure - skapa låneansökan
-POST {{AzureHost}}/api/loanapplications
+
+POST https://loanapplicationserviceapi20261019102717-dmf0cjceapcccebk.westus3-01.azurewebsites.net/api/loanapplications
 Content-Type: application/json
 
 {
   "socialSecurityNumber": "19920724-0459",
-  "amount": 100000
+  "amount": 1
 }

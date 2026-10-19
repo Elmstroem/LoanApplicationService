@@ -1,3 +1,4 @@
 <Solution>
+  <Project Path="CreditScore.Api/CreditScore.Api.csproj" />
   <Project Path="LoanApplicationService.Api/LoanApplicationService.Api..csproj" />
 </Solution>
