@@ -35,6 +35,15 @@ public class InMemoryCustomerRepository
         }
     ];
 
+    private int _nextId = 4;
+
+    private readonly object _lock = new();
+
+
+    // ============================================
+    // GET - Hämta kund via personnummer
+    // ============================================
+
     public Task<Customer?> GetBySocialSecurityNumberAsync(
         string socialSecurityNumber)
     {
@@ -45,5 +54,55 @@ public class InMemoryCustomerRepository
                     socialSecurityNumber);
 
         return Task.FromResult(customer);
+    }
+
+
+    // ============================================
+    // CREATE - Skapa ny kund
+    // ============================================
+
+    public Task<Customer> CreateAsync(
+        Customer customer)
+    {
+        lock (_lock)
+        {
+            customer.Id = _nextId;
+
+            _nextId++;
+
+            _customers.Add(customer);
+        }
+
+        return Task.FromResult(customer);
+    }
+
+
+    // ============================================
+    // UPDATE - Uppdatera kund
+    // ============================================
+
+    public Task<Customer?> UpdateAsync(
+        string socialSecurityNumber,
+        decimal annualIncome,
+        decimal totalDebt)
+    {
+        lock (_lock)
+        {
+            Customer? customer =
+                _customers.FirstOrDefault(
+                    customer =>
+                        customer.SocialSecurityNumber ==
+                        socialSecurityNumber);
+
+            if (customer is null)
+            {
+                return Task.FromResult<Customer?>(null);
+            }
+
+            customer.AnnualIncome = annualIncome;
+            customer.TotalDebt = totalDebt;
+
+            return Task.FromResult<Customer?>(customer);
+        }
     }
 }

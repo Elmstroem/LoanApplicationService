@@ -25,3 +25,79 @@ GET {{AzureCreditScoreHost}}/api/customers/19780320-5678/credit-score
 
 ### Kund som inte finns - Azure
 GET {{AzureCreditScoreHost}}/api/customers/19000101-9999/credit-score
+
+
+
+
+### Skapa ny kund lokalt
+
+POST https://localhost:8000/api/customers
+Content-Type: application/json
+
+{
+  "socialSecurityNumber": "19000101-9999",
+  "name": "Test Person",
+  "annualIncome": 450000,
+  "totalDebt": 100000
+}
+
+### Uppdatera kund lokalt
+
+PUT https://localhost:8000/api/customers/19000101-9999
+Content-Type: application/json
+
+{
+  "annualIncome": 10000000,
+  "totalDebt": 10000
+}
+
+### Kontrollera uppdaterat Credit Score
+
+GET https://localhost:8000/api/customers/19951212-1234/credit-score
+
+### Uppdatera kund som inte finns
+
+PUT https://localhost:8000/api/customers/19000101-9999
+Content-Type: application/json
+
+{
+  "annualIncome": 600000,
+  "totalDebt": 120000
+}
+
+
+### Production - skapa ny kund
+
+POST https://localhost:8000/api/customers
+Content-Type: application/json
+
+{
+  "socialSecurityNumber": "19991111-4325",
+  "name": "Production Test",
+  "annualIncome": 500000,
+  "totalDebt": 125000
+}
+
+### Production - uppdatera kund
+
+PUT https://localhost:8000/api/customers/19991111-4325
+Content-Type: application/json
+
+{
+  "annualIncome": 600000,
+  "totalDebt": 120000
+}
+
+### Production - verifiera uppdateringen
+
+GET https://localhost:8000/api/customers/19991111-4325/credit-score
+
+### Production - uppdatera kund som inte finns
+
+PUT https://localhost:8000/api/customers/19000101-9999
+Content-Type: application/json
+
+{
+  "annualIncome": 600000,
+  "totalDebt": 120000
+}
