@@ -1,6 +1,21 @@
-@CreditScore.Api_HostAddress = http://localhost:5077
+@CreditScoreHost = https://localhost:8000
 
-GET {{CreditScore.Api_HostAddress}}/weatherforecast/
-Accept: application/json
 
-###
+### Anna Svensson - förväntat CreditScore 71
+
+GET {{CreditScoreHost}}/api/customers/19900101-2010/credit-score
+
+
+### Erik Johansson - förväntat CreditScore 50
+
+GET {{CreditScoreHost}}/api/customers/19850515-1234/credit-score
+
+
+### Maria Lindberg - förväntat CreditScore 0
+
+GET {{CreditScoreHost}}/api/customers/19780320-5678/credit-score
+
+
+### Kund som inte finns - förväntat 404
+
+GET {{CreditScoreHost}}/api/customers/19000101-9999/credit-score
