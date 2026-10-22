@@ -33,10 +33,21 @@ Content-Type: application/json
 
 ### Azure - skapa låneansökan
 
+
 POST https://loanapplicationserviceapi20261019102717-dmf0cjceapcccebk.westus3-01.azurewebsites.net/api/loanapplications
 Content-Type: application/json
 
 {
   "socialSecurityNumber": "19920724-0459",
   "amount": 1
+}
+
+### Azure - ogiltig ansökan
+
+POST https://loanapplicationserviceapi20261019102717-dmf0cjceapcccebk.westus3-01.azurewebsites.net/api/loanapplications
+Content-Type: application/json
+
+{
+  "socialSecurityNumber": "19920724-0459",
+  "amount": 0
 }

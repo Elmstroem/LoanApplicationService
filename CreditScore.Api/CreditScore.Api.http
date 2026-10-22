@@ -1,21 +1,27 @@
 @CreditScoreHost = https://localhost:8000
+@AzureCreditScoreHost = https://creditscoreapielmstrom-amekd7ezcghaabe2.westus3-01.azurewebsites.net
 
-
-### Anna Svensson - förväntat CreditScore 71
-
+### Anna Svensson - lokalt
 GET {{CreditScoreHost}}/api/customers/19900101-2010/credit-score
 
-
-### Erik Johansson - förväntat CreditScore 50
-
+### Erik Johansson - lokalt
 GET {{CreditScoreHost}}/api/customers/19850515-1234/credit-score
 
-
-### Maria Lindberg - förväntat CreditScore 0
-
+### Maria Lindberg - lokalt
 GET {{CreditScoreHost}}/api/customers/19780320-5678/credit-score
 
-
-### Kund som inte finns - förväntat 404
-
+### Kund som inte finns - lokalt
 GET {{CreditScoreHost}}/api/customers/19000101-9999/credit-score
+
+
+### Anna Svensson - Azure
+GET {{AzureCreditScoreHost}}/api/customers/19900101-2010/credit-score
+
+### Erik Johansson - Azure
+GET {{AzureCreditScoreHost}}/api/customers/19850515-1234/credit-score
+
+### Maria Lindberg - Azure
+GET {{AzureCreditScoreHost}}/api/customers/19780320-5678/credit-score
+
+### Kund som inte finns - Azure
+GET {{AzureCreditScoreHost}}/api/customers/19000101-9999/credit-score

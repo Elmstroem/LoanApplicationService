@@ -13,16 +13,35 @@ builder.Services.AddOpenApi();
 
 
 // ============================================
-// Dependency Injection
+// Dependency Injection - Service
 // ============================================
-
-builder.Services.AddScoped<
-    ICustomerRepository,
-    CustomerRepository>();
 
 builder.Services.AddScoped<
     ICreditScoreService,
     CreditScoreService>();
+
+
+// ============================================
+// Dependency Injection - Repository
+// ============================================
+
+// Lokalt i Development:
+// använd SQL Server + Dapper
+if (builder.Environment.IsDevelopment())
+{
+    builder.Services.AddScoped<
+        ICustomerRepository,
+        CustomerRepository>();
+}
+
+// I Production / Azure:
+// använd data i minnet
+else
+{
+    builder.Services.AddSingleton<
+        ICustomerRepository,
+        InMemoryCustomerRepository>();
+}
 
 
 var app = builder.Build();
