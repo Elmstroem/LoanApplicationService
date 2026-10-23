@@ -1,19 +1,58 @@
-@LoanApplicationService_Api_HostAddress = https://localhost:8000
+@LoanApplicationHost = https://localhost:8000
+@AzureLoanApplicationHost = https://loanapplicationserviceapi20261019102717-dmf0cjceapcccebk.westus3-01.azurewebsites.net
 
 
-### Skapa giltig låneansökan
+############################################################
+# LOKALT - INTEGRATION MED CREDITSCORE.API
+############################################################
 
-POST {{LoanApplicationService_Api_HostAddress}}/api/loanapplications
+### Anna Svensson - CreditScore 71 → Approved
+POST {{LoanApplicationHost}}/api/loanapplications
 Content-Type: application/json
 
 {
-  "socialSecurityNumber": "19920724-3333",
+  "socialSecurityNumber": "19900101-2010",
   "amount": 100000
 }
 
-### Ogiltigt personnummer
 
-POST {{LoanApplicationService_Api_HostAddress}}/api/loanapplications
+### Erik Johansson - CreditScore 50 → Approved
+POST {{LoanApplicationHost}}/api/loanapplications
+Content-Type: application/json
+
+{
+  "socialSecurityNumber": "19850515-1234",
+  "amount": 100000
+}
+
+
+### Maria Lindberg - CreditScore 0 → Declined
+POST {{LoanApplicationHost}}/api/loanapplications
+Content-Type: application/json
+
+{
+  "socialSecurityNumber": "19780320-5678",
+  "amount": 100000
+}
+
+
+### Kund finns inte i CreditScore → 404
+POST {{LoanApplicationHost}}/api/loanapplications
+Content-Type: application/json
+
+{
+  "socialSecurityNumber": "19000101-8888",
+  "amount": 100000
+}
+
+
+
+############################################################
+# LOKALT - VALIDERING
+############################################################
+
+### Ogiltigt personnummer → 400
+POST {{LoanApplicationHost}}/api/loanapplications
 Content-Type: application/json
 
 {
@@ -21,9 +60,9 @@ Content-Type: application/json
   "amount": 100000
 }
 
-### Ogiltigt lånebelopp
 
-POST {{LoanApplicationService_Api_HostAddress}}/api/loanapplications
+### Ogiltigt lånebelopp → 400
+POST {{LoanApplicationHost}}/api/loanapplications
 Content-Type: application/json
 
 {
@@ -31,23 +70,70 @@ Content-Type: application/json
   "amount": 0
 }
 
-### Azure - skapa låneansökan
 
 
-POST https://loanapplicationserviceapi20261019102717-dmf0cjceapcccebk.westus3-01.azurewebsites.net/api/loanapplications
+############################################################
+# AZURE
+#
+# Dessa testar vi efter att Azure-versionen av LoanApplication
+# har fått environment variabeln CreditScoreApi__BaseUrl.
+############################################################
+
+### Azure - Anna → Approved
+POST {{AzureLoanApplicationHost}}/api/loanapplications
 Content-Type: application/json
 
 {
-  "socialSecurityNumber": "19920724-0459",
-  "amount": 1
+  "socialSecurityNumber": "19900101-2010",
+  "amount": 100000
 }
 
-### Azure - ogiltig ansökan
+
+### Azure - Erik → Approved
+POST {{AzureLoanApplicationHost}}/api/loanapplications
+Content-Type: application/json
+
+{
+  "socialSecurityNumber": "19850515-1234",
+  "amount": 100000
+}
+
+
+### Azure - Maria → Declined
+POST {{AzureLoanApplicationHost}}/api/loanapplications
+Content-Type: application/json
+
+{
+  "socialSecurityNumber": "19780320-5678",
+  "amount": 100000
+}
+
+
+### Azure - kund finns inte → 404
+POST {{AzureLoanApplicationHost}}/api/loanapplications
+Content-Type: application/json
+
+{
+  "socialSecurityNumber": "19000101-8888",
+  "amount": 100000
+}
+
+
+### Azure - ogiltigt lånebelopp → 400
+POST {{AzureLoanApplicationHost}}/api/loanapplications
+Content-Type: application/json
+
+{
+  "socialSecurityNumber": "19900101-2010",
+  "amount": 0
+}
+
+### Azure - Anna → CreditScore 71 → Approved
 
 POST https://loanapplicationserviceapi20261019102717-dmf0cjceapcccebk.westus3-01.azurewebsites.net/api/loanapplications
 Content-Type: application/json
 
 {
-  "socialSecurityNumber": "19920724-0459",
-  "amount": 0
+  "socialSecurityNumber": "19900101-2010",
+  "amount": 100000
 }

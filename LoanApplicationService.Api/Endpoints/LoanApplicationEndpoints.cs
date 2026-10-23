@@ -8,36 +8,46 @@ public static class LoanApplicationEndpoints
     public static void MapLoanApplicationEndpoints(
         this WebApplication app)
     {
-        app.MapPost("/api/loanapplications", async (
-            CreateLoanApplicationDto request,
-            ILoanApplicationService loanApplicationService) =>
-        {
-            try
+        app.MapPost(
+            "/api/loanapplications",
+            async (
+                CreateLoanApplicationDto request,
+                ILoanApplicationService loanApplicationService) =>
             {
-                var loanApplication =
-                    await loanApplicationService
-                        .CreateLoanApplicationAsync(
-                            request.SocialSecurityNumber,
-                            request.Amount);
-
-                var result = new LoanApplicationResultDto
+                try
                 {
-                    Id = loanApplication.Id,
-                    Status = loanApplication.Status
-                };
+                    var loanApplication =
+                        await loanApplicationService
+                            .CreateLoanApplicationAsync(
+                                request.SocialSecurityNumber,
+                                request.Amount);
 
-                return Results.Created(
-                    $"/api/loanapplications/{loanApplication.Id}",
-                    result);
-            }
-            catch (ArgumentException exception)
-            {
-                return Results.BadRequest(
-                    new
+                    var result = new LoanApplicationResultDto
                     {
-                        error = exception.Message
-                    });
-            }
-        });
+                        Id = loanApplication.Id,
+                        Status = loanApplication.Status
+                    };
+
+                    return Results.Created(
+                        $"/api/loanapplications/{loanApplication.Id}",
+                        result);
+                }
+                catch (ArgumentException exception)
+                {
+                    return Results.BadRequest(
+                        new
+                        {
+                            error = exception.Message
+                        });
+                }
+                catch (KeyNotFoundException exception)
+                {
+                    return Results.NotFound(
+                        new
+                        {
+                            error = exception.Message
+                        });
+                }
+            });
     }
 }

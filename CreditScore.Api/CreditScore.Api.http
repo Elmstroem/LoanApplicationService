@@ -1,37 +1,55 @@
-@CreditScoreHost = https://localhost:8000
+@CreditScoreHost = http://localhost:9100
 @AzureCreditScoreHost = https://creditscoreapielmstrom-amekd7ezcghaabe2.westus3-01.azurewebsites.net
 
-### Anna Svensson - lokalt
+
+############################################################
+# GET - LOKALT
+############################################################
+
+### Anna Svensson - förväntat CreditScore 71
 GET {{CreditScoreHost}}/api/customers/19900101-2010/credit-score
 
-### Erik Johansson - lokalt
+
+### Erik Johansson - förväntat CreditScore 50
 GET {{CreditScoreHost}}/api/customers/19850515-1234/credit-score
 
-### Maria Lindberg - lokalt
+
+### Maria Lindberg - förväntat CreditScore 0
 GET {{CreditScoreHost}}/api/customers/19780320-5678/credit-score
 
-### Kund som inte finns - lokalt
-GET {{CreditScoreHost}}/api/customers/19000101-9999/credit-score
 
+### Kund som inte finns - förväntat 404
+GET {{CreditScoreHost}}/api/customers/19000101-8888/credit-score
+
+
+
+############################################################
+# GET - AZURE
+############################################################
 
 ### Anna Svensson - Azure
 GET {{AzureCreditScoreHost}}/api/customers/19900101-2010/credit-score
 
+
 ### Erik Johansson - Azure
 GET {{AzureCreditScoreHost}}/api/customers/19850515-1234/credit-score
+
 
 ### Maria Lindberg - Azure
 GET {{AzureCreditScoreHost}}/api/customers/19780320-5678/credit-score
 
+
 ### Kund som inte finns - Azure
-GET {{AzureCreditScoreHost}}/api/customers/19000101-9999/credit-score
+GET {{AzureCreditScoreHost}}/api/customers/19000101-8888/credit-score
 
 
 
+############################################################
+# POST - SKAPA KUND LOKALT
+############################################################
 
 ### Skapa ny kund lokalt
-
-POST https://localhost:8000/api/customers
+POST {{CreditScoreHost}}/api/customers
 Content-Type: application/json
 
 {
@@ -41,9 +59,14 @@ Content-Type: application/json
   "totalDebt": 100000
 }
 
-### Uppdatera kund lokalt
 
-PUT https://localhost:8000/api/customers/19000101-9999
+
+############################################################
+# PUT - UPPDATERA KUND LOKALT
+############################################################
+
+### Uppdatera Test Person
+PUT {{CreditScoreHost}}/api/customers/19000101-9999
 Content-Type: application/json
 
 {
@@ -51,13 +74,13 @@ Content-Type: application/json
   "totalDebt": 10000
 }
 
+
 ### Kontrollera uppdaterat Credit Score
+GET {{CreditScoreHost}}/api/customers/19000101-9999/credit-score
 
-GET https://localhost:8000/api/customers/19951212-1234/credit-score
 
-### Uppdatera kund som inte finns
-
-PUT https://localhost:8000/api/customers/19000101-9999
+### Uppdatera kund som inte finns - förväntat 404
+PUT {{CreditScoreHost}}/api/customers/19000101-8888
 Content-Type: application/json
 
 {
@@ -66,9 +89,15 @@ Content-Type: application/json
 }
 
 
-### Production - skapa ny kund
 
-POST https://localhost:8000/api/customers
+############################################################
+# PRODUCTION / INMEMORY - LOKALT
+#
+# Dessa används när ASPNETCORE_ENVIRONMENT = Production.
+############################################################
+
+### Production - skapa ny kund
+POST {{CreditScoreHost}}/api/customers
 Content-Type: application/json
 
 {
@@ -78,26 +107,20 @@ Content-Type: application/json
   "totalDebt": 125000
 }
 
-### Production - uppdatera kund
 
-PUT https://localhost:8000/api/customers/19991111-4325
+### Production - uppdatera kund
+PUT {{CreditScoreHost}}/api/customers/19991111-4325
 Content-Type: application/json
 
 {
   "annualIncome": 600000,
   "totalDebt": 120000
 }
+
 
 ### Production - verifiera uppdateringen
+GET {{CreditScoreHost}}/api/customers/19991111-4325/credit-score
 
-GET https://localhost:8000/api/customers/19991111-4325/credit-score
+### Kontrollera Anna direkt i CreditScore Azure
 
-### Production - uppdatera kund som inte finns
-
-PUT https://localhost:8000/api/customers/19000101-9999
-Content-Type: application/json
-
-{
-  "annualIncome": 600000,
-  "totalDebt": 120000
-}
+GET https://creditscoreapielmstrom-amekd7ezcghaabe2.westus3-01.azurewebsites.net/api/customers/19900101-2010/credit-score

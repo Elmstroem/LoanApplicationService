@@ -17,14 +17,19 @@ builder.Services.AddOpenApi();
 
 
 // ============================================
-// Dependency Injection - Services
+// Dependency Injection - Loan Application Service
 // ============================================
 
 builder.Services.AddScoped<
     ILoanApplicationService,
     LoanAppService>();
 
-builder.Services.AddScoped<
+
+// ============================================
+// Dependency Injection - Credit Score HTTP Client
+// ============================================
+
+builder.Services.AddHttpClient<
     ICreditScoreService,
     CreditScoreService>();
 
@@ -34,7 +39,7 @@ builder.Services.AddScoped<
 // ============================================
 
 // Lokalt i Development:
-// använd riktig SQL Server + Dapper
+// använd SQL Server + Dapper
 if (builder.Environment.IsDevelopment())
 {
     builder.Services.AddScoped<
@@ -43,7 +48,7 @@ if (builder.Environment.IsDevelopment())
 }
 
 // I Production / Azure:
-// använd repository som lagrar data i minnet
+// använd InMemory repository
 else
 {
     builder.Services.AddSingleton<
@@ -56,8 +61,8 @@ else
 // JSON-inställningar
 // ============================================
 
-// Gör så att enum returneras som exempelvis
-// "Approved" istället för 0
+// Returnera enum som exempelvis "Approved"
+// istället för 0
 builder.Services.ConfigureHttpJsonOptions(options =>
 {
     options.SerializerOptions.Converters.Add(
@@ -69,7 +74,7 @@ var app = builder.Build();
 
 
 // ============================================
-// HTTP request pipeline
+// HTTP Pipeline
 // ============================================
 
 if (app.Environment.IsDevelopment())
